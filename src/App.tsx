@@ -1,11 +1,15 @@
-import Navbar from "./components/Navbar"
+import { Container, Grid, Segment, Sidebar } from "semantic-ui-react";
+import './app.css'
+import WeekForecast from "./components/WeekForecast";
 
-function App() {
+const App = () => {
   return (
     <>
-      <Navbar />
+      <Container className="content-container">
+          <WeekForecast />
+      </Container>
     </>
-  )
+  );
 }
 
 export default App

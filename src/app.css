@@ -1,0 +1,8 @@
+body {
+    background-color: rgb(31, 28, 50) !important;
+}
+
+.ui.container.content-container {
+    margin-top: 6em;
+    background-color: red !important;
+}
