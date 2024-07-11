@@ -4,5 +4,13 @@ body {
 
 .content-container {
     margin-top: 6em;
-    background-color: red !important;
+}
+
+.forecast-today {
+    background-color: rgb(42, 38, 69) !important;
+}
+
+.forecast-ahead {
+    margin-top: 2em;
+    background-color: rgb(42, 38, 69) !important;
 }
