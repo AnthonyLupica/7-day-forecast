@@ -7,6 +7,7 @@ import { Weather } from "../models/weather";
 export default class ForecastStore {
     location: Location | undefined = undefined;
     forecast: Weather[] = [];
+    forecastNow: Weather | undefined = undefined;
     error: string | undefined = undefined;
     
     constructor() {
@@ -53,6 +54,10 @@ export default class ForecastStore {
     };
 
     loadForecast = async () => {
+        if (!this.location) {
+            return;
+        }
+        
         const fetchFromURL = async (url: string) => {
             try {
                 const res = await axios.get(url, {
@@ -63,9 +68,19 @@ export default class ForecastStore {
 
                 // Parse the forecast data and update state
                 if (res.data.properties?.periods) {
-                    const filteredForecast = res.data.properties?.periods.filter((period: Weather) => {
-                        return period.name.trim().split(' ').length === 1; // Filter out days with more than one word
+                    const periods = res.data.properties.periods;
+
+                    const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+                    const filteredForecast = periods.filter((period: Weather) => {
+                        return daysOfWeek.includes(period.name);
                     });
+                    
+                    this.forecastNow = {
+                        name: periods[0].name,
+                        shortForecast: periods[0].shortForecast,
+                        temperature: periods[0].temperature,
+                        windSpeed: periods[0].windSpeed
+                    };
 
                     this.forecast = filteredForecast.map((period: Weather) => ({
                         name: period.name,
@@ -80,10 +95,6 @@ export default class ForecastStore {
                 console.error(error);
             }
         };
-        
-        if (!this.location) {
-            return;
-        }
 
         try {
             const urlBase = 'https://api.weather.gov';
