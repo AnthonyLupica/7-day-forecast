@@ -18,7 +18,7 @@ const ForecastDashboard = () => {
             {forecast.length !== 0 && forecastNow ? (
                 <>
                     <Grid.Row columns={1}>
-                        <Grid.Column textAlign="center" width={6}>
+                        <Grid.Column textAlign="center" width={5}>
                             <Card className="forecast">
                                 <Card.Content classname="forecast-content">
                                     <Card.Header>{forecastNow.name}</Card.Header>
