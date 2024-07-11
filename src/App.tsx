@@ -5,10 +5,10 @@ import ForecastDashboard from './components/ForecastDashboard';
 
 const App = () => {
   return (
-    <Container className="content-container">
-        <LocationSelect />
-        <ForecastDashboard />
-    </Container>
+      <Container className="content-container">
+          <LocationSelect />
+          <ForecastDashboard />
+      </Container>
   );
 }
 

@@ -1,8 +1,9 @@
 import { observer } from "mobx-react-lite";
 import { useStore } from "../context/context";
-import { Card, Grid, SemanticWIDTHS } from "semantic-ui-react";
+import { Grid, SemanticWIDTHS } from "semantic-ui-react";
 import { useEffect } from "react";
 import { Weather } from "../models/weather";
+import ForecastCard from "./ForecastCard";
 
 const ForecastDashboard = () => {
 
@@ -14,37 +15,29 @@ const ForecastDashboard = () => {
     }, [forecastStore, location])
 
     return (
-        <Grid className="forecast-container" centered>
+        <Grid className="forecast-container">
             {forecast.length !== 0 && forecastNow ? (
-                <>
-                    <Grid.Row columns={1}>
-                        <Grid.Column textAlign="center" width={5}>
-                            <Card className="forecast">
-                                <Card.Content classname="forecast-content">
-                                    <Card.Header>{forecastNow.name}</Card.Header>
-                                    <Card.Meta>{forecastNow.shortForecast}</Card.Meta>
-                                    <Card.Description>
-                                        <p>{forecastNow.temperature}°</p>
-                                        <p>Wind speed of {forecastNow.windSpeed}</p>
-                                    </Card.Description>
-                                </Card.Content>
-                            </Card>
+                <>               
+                    <Grid.Row>
+                        <Grid.Column textAlign="center" width={16}>
+                            <ForecastCard 
+                                name={forecastNow.name} 
+                                shortForecast={forecastNow.shortForecast}
+                                temperature={forecastNow.temperature}
+                                windSpeed={forecastNow.windSpeed}
+                            />
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row columns={forecast.length as SemanticWIDTHS}>
-                        {forecast.map((el: Weather) => {
+                        {forecast.map((weatherItem: Weather) => {
                             return (
-                                <Grid.Column key={el.name} textAlign="center" stretched>
-                                    <Card className="forecast">
-                                        <Card.Content classname="forecast-content">
-                                            <Card.Header>{el.name}</Card.Header>
-                                            <Card.Meta>{el.shortForecast}</Card.Meta>
-                                            <Card.Description>
-                                                <p>{el.temperature}°</p>
-                                                <p>Wind speed of {el.windSpeed}</p>
-                                            </Card.Description>
-                                        </Card.Content>
-                                    </Card>
+                                <Grid.Column key={weatherItem.name} textAlign="center" stretched>
+                                    <ForecastCard 
+                                        name={weatherItem.name} 
+                                        shortForecast={weatherItem.shortForecast}
+                                        temperature={weatherItem.temperature}
+                                        windSpeed={weatherItem.windSpeed}
+                                    />
                                 </Grid.Column>
                             );
                         })}

@@ -3,16 +3,16 @@ body {
 }
 
 .content-container {
-    margin-top: 6em;
+    margin-top: 3em;
 }
 
-.forecast-today {
+.forecast-main {
     background-color: rgb(42, 38, 69) !important;
+    height: 300px;
 }
 
-.forecast {
-    background-color: rgb(60, 55, 97) !important;
-    color: white !important;
+.forecast-card {
+    background-color: rgb(176, 174, 192) !important;
 }
 
 .forecast-container {
