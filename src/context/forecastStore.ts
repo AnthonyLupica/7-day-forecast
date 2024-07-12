@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { Location } from "../models/location";
 import jsonp from "jsonp";
 import axios from "axios";
@@ -43,7 +43,6 @@ export default class ForecastStore {
                         address: match.matchedAddress
                     };
 
-                    console.log(this.location);
                     this.error = undefined;
                 } else {
                    this.location = undefined;
@@ -75,22 +74,29 @@ export default class ForecastStore {
                         return daysOfWeek.includes(period.name);
                     });
                     
-                    this.forecastNow = {
-                        name: periods[0].name,
-                        shortForecast: periods[0].shortForecast,
-                        temperature: periods[0].temperature,
-                        windSpeed: periods[0].windSpeed
-                    };
-
-                    this.forecast = filteredForecast.map((period: Weather) => ({
-                        name: period.name,
-                        shortForecast: period.shortForecast,
-                        temperature: period.temperature,
-                        windSpeed: period.windSpeed
-                    }));
+                    runInAction(() => {
+                        this.forecastNow = {
+                            name: periods[0].name,
+                            detailedForecast: periods[0].detailedForecast,
+                            temperature: periods[0].temperature,
+                            windSpeed: periods[0].windSpeed,
+                            windDirection: periods[0].windDirection
+                        };
+                        
+                        this.forecast = [];
+                        filteredForecast.forEach((period: Weather, index: number) => {
+                            if (index < 6) { // limit to 6 days out
+                                this.forecast.push({
+                                    name: period.name,
+                                    detailedForecast: period.detailedForecast,
+                                    temperature: period.temperature,
+                                    windSpeed: period.windSpeed,
+                                    windDirection: period.windDirection
+                                });
+                            }
+                        });
+                    });
                 }
-
-                console.log(this.forecast)
             } catch (error) {
                 console.error(error);
             }

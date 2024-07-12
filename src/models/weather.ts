@@ -1,6 +1,7 @@
 export interface Weather {
     name: string
-    shortForecast: string
+    detailedForecast: string
     temperature: string,
-    windSpeed: string
+    windSpeed: string,
+    windDirection: string
 }

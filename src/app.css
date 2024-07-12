@@ -13,6 +13,7 @@ body {
 
 .forecast-card {
     background-color: rgb(176, 174, 192) !important;
+    margin-top: 2em !important
 }
 
 .forecast-container {

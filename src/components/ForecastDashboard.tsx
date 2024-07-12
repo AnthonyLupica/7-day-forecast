@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { useStore } from "../context/context";
-import { Grid, SemanticWIDTHS } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 import { useEffect } from "react";
 import { Weather } from "../models/weather";
 import ForecastCard from "./ForecastCard";
@@ -19,24 +19,26 @@ const ForecastDashboard = () => {
             {forecast.length !== 0 && forecastNow ? (
                 <>               
                     <Grid.Row>
-                        <Grid.Column textAlign="center" width={16}>
+                        <Grid.Column textAlign="center">
                             <ForecastCard 
                                 name={forecastNow.name} 
-                                shortForecast={forecastNow.shortForecast}
+                                detailedForecast={forecastNow.detailedForecast}
                                 temperature={forecastNow.temperature}
                                 windSpeed={forecastNow.windSpeed}
+                                windDirection={forecastNow.windDirection}
                             />
                         </Grid.Column>
                     </Grid.Row>
-                    <Grid.Row columns={forecast.length as SemanticWIDTHS}>
+                    <Grid.Row columns={3}>
                         {forecast.map((weatherItem: Weather) => {
                             return (
                                 <Grid.Column key={weatherItem.name} textAlign="center" stretched>
                                     <ForecastCard 
                                         name={weatherItem.name} 
-                                        shortForecast={weatherItem.shortForecast}
+                                        detailedForecast={weatherItem.detailedForecast}
                                         temperature={weatherItem.temperature}
                                         windSpeed={weatherItem.windSpeed}
+                                        windDirection={weatherItem.windDirection}
                                     />
                                 </Grid.Column>
                             );
