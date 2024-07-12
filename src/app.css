@@ -6,18 +6,13 @@ body {
     margin-top: 3em;
 }
 
-.forecast-main {
-    background-color: rgb(42, 38, 69) !important;
-    height: 300px;
-}
-
 .forecast-card {
-    background-color: rgb(176, 174, 192) !important;
-    margin-top: 2em !important
+    background-color: rgb(213, 210, 235) !important;
+    margin-bottom: 1em !important
 }
 
 .forecast-container {
-    margin-top: 5em !important;
+    margin-top: 2em !important;
 }
 
 .placeholder {
