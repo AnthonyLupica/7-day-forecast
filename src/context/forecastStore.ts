@@ -40,8 +40,13 @@ export default class ForecastStore {
          // Use jsonp to make the JSONP request
         jsonp(url, { timeout: 10000, name: 'jsonp' }, (err, data) => {
             if (err) {
-                this.error = "An internal error was encountered"
-                this.location = undefined;
+                runInAction(() => {
+                    this.error = "An internal error was encountered"
+                    this.location = undefined;
+
+                    this.forecast.now = undefined;
+                    this.forecast.ahead = [];
+                });
 
                 console.error(err.message);
             } else {
@@ -62,6 +67,9 @@ export default class ForecastStore {
                     runInAction(() => {
                         this.location = undefined;
                         this.error = "No addresses could be matched"
+
+                        this.forecast.now = undefined;
+                        this.forecast.ahead = [];
                     })
                 }
             }

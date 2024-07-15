@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { useStore } from "../context/context";
-import { Grid } from "semantic-ui-react";
+import { Grid, Header, Icon } from "semantic-ui-react";
 import { useEffect } from "react";
 import { Weather } from "../models/weather";
 import ForecastCard from "./ForecastCard";
@@ -20,6 +20,11 @@ const ForecastDashboard = () => {
                 <>               
                     <Grid.Row>
                         <Grid.Column textAlign="center">
+                            <Header style={{ color: "white" }}>
+                                <Icon inverted name="location arrow" />
+                                {location!.address}
+                            </Header>
+                            
                             <ForecastCard 
                                 name={forecast.now.name} 
                                 detailedForecast={forecast.now.detailedForecast}
