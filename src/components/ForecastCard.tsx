@@ -13,8 +13,8 @@ const ForecastCard = ({
             <Card.Content>
                 <Card.Header>{name}</Card.Header>
                 <Card.Description>
-                    <p>{temperature}°</p>
-                    <p>Wind speed of {windSpeed} {windDirection}</p>
+                    <h2>{temperature}°</h2>
+                    <h5>Wind speed of {windSpeed} {windDirection}</h5>
                 </Card.Description>
 
                 <Card.Meta>{detailedForecast}</Card.Meta>

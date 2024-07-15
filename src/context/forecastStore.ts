@@ -4,10 +4,22 @@ import jsonp from "jsonp";
 import axios from "axios";
 import { Weather } from "../models/weather";
 
+interface Forecast {
+    now: Weather | undefined;
+    ahead: Weather[];
+}
+
+const DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const FORECAST_LIMIT = 6;
+
 export default class ForecastStore {
     location: Location | undefined = undefined;
-    forecast: Weather[] = [];
-    forecastNow: Weather | undefined = undefined;
+
+    forecast: Forecast = {
+        now: undefined,
+        ahead: []
+    };
+
     error: string | undefined = undefined;
     
     constructor() {
@@ -31,22 +43,26 @@ export default class ForecastStore {
                 this.error = "An internal error was encountered"
                 this.location = undefined;
 
-                console.log(err.message);
+                console.error(err.message);
             } else {
                 // Extract latitude and longitude from the response
                 const match = data.result.addressMatches[0];
 
                 if (match?.coordinates) {
-                    this.location = {
-                        latitude: match.coordinates.y,
-                        longitude: match.coordinates.x,
-                        address: match.matchedAddress
-                    };
-
-                    this.error = undefined;
+                    runInAction(() => {
+                        this.location = {
+                            latitude: match.coordinates.y,
+                            longitude: match.coordinates.x,
+                            address: match.matchedAddress
+                        };
+    
+                        this.error = undefined;
+                    });
                 } else {
-                   this.location = undefined;
-                   this.error = "No addresses could be matched"
+                    runInAction(() => {
+                        this.location = undefined;
+                        this.error = "No addresses could be matched"
+                    })
                 }
             }
         });
@@ -68,14 +84,13 @@ export default class ForecastStore {
                 // Parse the forecast data and update state
                 if (res.data.properties?.periods) {
                     const periods = res.data.properties.periods;
-
-                    const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-                    const filteredForecast = periods.filter((period: Weather) => {
-                        return daysOfWeek.includes(period.name);
-                    });
-                    
+                   
+                    const filteredForecast = periods.filter((period: Weather) => DAYS_OF_WEEK
+                        .includes(period.name))
+                        .slice(0, FORECAST_LIMIT);
+                
                     runInAction(() => {
-                        this.forecastNow = {
+                        this.forecast.now = {
                             name: periods[0].name,
                             detailedForecast: periods[0].detailedForecast,
                             temperature: periods[0].temperature,
@@ -83,18 +98,13 @@ export default class ForecastStore {
                             windDirection: periods[0].windDirection
                         };
                         
-                        this.forecast = [];
-                        filteredForecast.forEach((period: Weather, index: number) => {
-                            if (index < 6) { // limit to 6 days out
-                                this.forecast.push({
-                                    name: period.name,
-                                    detailedForecast: period.detailedForecast,
-                                    temperature: period.temperature,
-                                    windSpeed: period.windSpeed,
-                                    windDirection: period.windDirection
-                                });
-                            }
-                        });
+                        this.forecast.ahead = filteredForecast.map((period: Weather) => ({                               
+                            name: period.name,
+                            detailedForecast: period.detailedForecast,
+                            temperature: period.temperature,
+                            windSpeed: period.windSpeed,
+                            windDirection: period.windDirection                    
+                        }));
                     });
                 }
             } catch (error) {
@@ -115,7 +125,7 @@ export default class ForecastStore {
                 await fetchFromURL(forecastUrl);
             } 
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
 

@@ -8,7 +8,7 @@ import ForecastCard from "./ForecastCard";
 const ForecastDashboard = () => {
 
     const { forecastStore } = useStore();
-    const { location, forecast, forecastNow } = forecastStore;
+    const { location, forecast } = forecastStore;
 
     useEffect(() => {
         forecastStore.loadForecast();
@@ -16,21 +16,21 @@ const ForecastDashboard = () => {
 
     return (
         <Grid className="forecast-container">
-            {forecast.length !== 0 && forecastNow ? (
+            {forecast.ahead.length !== 0 && forecast.now ? (
                 <>               
                     <Grid.Row>
                         <Grid.Column textAlign="center">
                             <ForecastCard 
-                                name={forecastNow.name} 
-                                detailedForecast={forecastNow.detailedForecast}
-                                temperature={forecastNow.temperature}
-                                windSpeed={forecastNow.windSpeed}
-                                windDirection={forecastNow.windDirection}
+                                name={forecast.now.name} 
+                                detailedForecast={forecast.now.detailedForecast}
+                                temperature={forecast.now.temperature}
+                                windSpeed={forecast.now.windSpeed}
+                                windDirection={forecast.now.windDirection}
                             />
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row columns={3}>
-                        {forecast.map((weatherItem: Weather) => {
+                        {forecast.ahead.map((weatherItem: Weather) => {
                             return (
                                 <Grid.Column key={weatherItem.name} textAlign="center" stretched>
                                     <ForecastCard 
