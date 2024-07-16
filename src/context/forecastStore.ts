@@ -138,7 +138,7 @@ export default class ForecastStore {
             console.error(error);
         }
         finally {
-            runInAction(() => this.loading = true);
+            runInAction(() => this.loading = false);
         }
     };
 
