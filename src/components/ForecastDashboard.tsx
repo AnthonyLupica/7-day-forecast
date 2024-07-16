@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { useStore } from "../context/context";
-import { Grid, Header, Icon } from "semantic-ui-react";
+import { Dimmer, Grid, Header, Icon, Loader } from "semantic-ui-react";
 import { useEffect } from "react";
 import { Weather } from "../models/weather";
 import ForecastCard from "./ForecastCard";
@@ -8,11 +8,19 @@ import ForecastCard from "./ForecastCard";
 const ForecastDashboard = () => {
 
     const { forecastStore } = useStore();
-    const { location, forecast } = forecastStore;
+    const { location, forecast, loading } = forecastStore;
 
     useEffect(() => {
         forecastStore.loadForecast();
     }, [forecastStore, location])
+
+    if (loading) {
+        return (
+            <Dimmer active>
+                <Loader inverted content='Getting forecast' />
+            </Dimmer>
+        )
+    }
 
     return (
         <Grid className="forecast-container">

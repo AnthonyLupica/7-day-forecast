@@ -20,6 +20,7 @@ export default class ForecastStore {
         ahead: []
     };
 
+    loading: boolean = false;
     error: string | undefined = undefined;
     
     constructor() {
@@ -80,7 +81,8 @@ export default class ForecastStore {
         if (!this.location) {
             return;
         }
-        
+
+        this.loading = true;        
         const fetchFromURL = async (url: string) => {
             try {
                 const res = await axios.get(url, {
@@ -134,6 +136,9 @@ export default class ForecastStore {
             } 
         } catch (error) {
             console.error(error);
+        }
+        finally {
+            runInAction(() => this.loading = true);
         }
     };
 
